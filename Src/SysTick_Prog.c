@@ -5,7 +5,7 @@
 ***********************************************************/
 
 #include <stdint.h>
-#include <Stm32F446xx.h>
+#include <Stm32F103C8T6.h>
 #include <ErrType.h>
 
 #include <SysTick_Interface.h>
