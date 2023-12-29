@@ -16,10 +16,12 @@
 static uint16_t* ReceiveInterrupt_Ptrs_Arr[4];
 static uint32_t  ReceiveInterrupt_Size_Arr[4];
 static uint32_t  ReceiveInterrupt_Index_Arr[4];
+static SPI_Circular_t  ReceiveInterrupt_Circular_Arr[4];
 
 static uint16_t* TransmitInterrupt_Ptrs_Arr[4];
 static uint32_t  TransmitInterrupt_Size_Arr[4];
 static uint32_t  TransmitInterrupt_Index_Arr[4];
+static SPI_Circular_t  TransmitInterrupt_Circular_Arr[4];
 
 
 
@@ -350,9 +352,10 @@ uint8_t SPI_ReceivePeriodic(SPI_t spi, uint16_t* data)
 * @Param[in] spi : The spi peripheral, Option at @SPI_t enum
 * @Param[in] DataPtr : The pointer to transmit data from
 * @Param[in] DataSize : The size of the transmission buffer
+* * @Param[in] Cir : Enabling or disabling the continuous circular transmitting by re-assign the index to zero, Optionas at @SPI_Circular_t enum
 * @retval ErrorStatus_t, Options at @ErrorStatus_t enum
 ***********************************************************/
-ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize)
+ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize, SPI_Circular_t Cir)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
@@ -380,10 +383,10 @@ ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t
 		TransmitInterrupt_Size_Arr[spi]=DataSize;
 		/*Re-intializing the index in the array of indexes of transmitting data*/
 		TransmitInterrupt_Index_Arr[spi]=0;
+		/*Assigning the circular transmitting enable parameter*/
+		TransmitInterrupt_Circular_Arr[spi]=Cir;
 		/*Setting transmit interrupt enable bit*/
 		SPI->SPI_CR2|=0b1<<SPI_TRAN_IT_EN_BIT_ACCESS;
-		/*Sending first data frame to start the communication and to get transmission interrupt*/
-		SPI_TransmitNoBlock(spi);
 		ErrorState=OK;
 	}
 
@@ -424,9 +427,10 @@ ErrorStatus_t SPI_TransmitInterruptDisable(SPI_t spi)
 * @Param[in] spi : The spi peripheral, Option at @SPI_t enum
 * @Param[in] DataPtr : The pointer to receive data to
 * @Param[in] DataSize : The size of the reception buffer
+* @Param[in] Cir : Enabling or disabling the continuous circular receiving by re-assign the index to zero, Optionas at @SPI_Circular_t enum
 * @retval ErrorStatus_t, Options at @ErrorStatus_t enum
 ***********************************************************/
-ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize)
+ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize, SPI_Circular_t Cir)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
@@ -439,6 +443,11 @@ ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t 
 	{
 		ErrorState=NULLPTR;
 	}
+	/*Checking on the DataSize value as we send data then we check on it*/
+	else if(DataSize==0)
+	{
+		ErrorState=NOK;
+	}
 	else
 	{
 		/*Select the desired SPI peripheral*/
@@ -449,6 +458,8 @@ ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t 
 		ReceiveInterrupt_Size_Arr[spi]=DataSize;
 		/*Re-intializing the index in the array of indexes of receiving data*/
 		ReceiveInterrupt_Index_Arr[spi]=0;
+		/*Assigning the circular receiving enable parameter*/
+		ReceiveInterrupt_Circular_Arr[spi]=Cir;
 		/*Setting receive interrupt enable bit*/
 		SPI->SPI_CR2|=0b1<<SPI_RECE_IT_EN_BIT_ACCESS;
 		ErrorState=OK;
@@ -501,15 +512,32 @@ static void SPI_TransmitNoBlock(SPI_t spi)
 
 	/*Select the desired SPI*/
 	SPI_RegDef_t* SPI=SPI_SelcetPeripheral(spi);
-	/*Writing data to SPI data register from the pointer of transmission data*/
-	SPI->SPI_DR=TransmitInterrupt_Ptrs_Arr[spi][TransmitInterrupt_Index_Arr[spi]];
-	/*Incrementing the index of transmitted data*/
-	TransmitInterrupt_Index_Arr[spi]++;
-	/*Checking on the index of transmitted data if it reached maximum*/
-	if(TransmitInterrupt_Index_Arr[spi]==TransmitInterrupt_Size_Arr[spi])
+
+	/*Checking on the index of transmitted data of next transmission if it reached maximum*/
+	if(TransmitInterrupt_Index_Arr[spi]>=TransmitInterrupt_Size_Arr[spi])
 	{
 		/*Re-assigin the index of transmitted data to zero*/
 		TransmitInterrupt_Index_Arr[spi]=0;
+		/*Checking on the continuous transmitting parameter*/
+		if(TransmitInterrupt_Circular_Arr[spi]==CIRCULAR_DISABLE)
+		{
+			/*Stop transmitting any further data*/
+			SPI_TransmitInterruptDisable(spi);
+		}
+		else
+		{
+			/*Writing data to SPI data register from the pointer of transmission data*/
+			SPI->SPI_DR=TransmitInterrupt_Ptrs_Arr[spi][TransmitInterrupt_Index_Arr[spi]];
+			/*Incrementing the index of transmitted data*/
+			TransmitInterrupt_Index_Arr[spi]++;
+		}
+	}
+	else
+	{
+		/*Writing data to SPI data register from the pointer of transmission data*/
+		SPI->SPI_DR=TransmitInterrupt_Ptrs_Arr[spi][TransmitInterrupt_Index_Arr[spi]];
+		/*Incrementing the index of transmitted data*/
+		TransmitInterrupt_Index_Arr[spi]++;
 	}
 }
 
@@ -529,15 +557,32 @@ static void SPI_ReceiveNoBlock(SPI_t spi)
 
 	/*Select the desired SPI*/
 	SPI_RegDef_t* SPI=SPI_SelcetPeripheral(spi);
-	/*Reading data from SPI data register to the pointer of reception data*/
-	ReceiveInterrupt_Ptrs_Arr[spi][ReceiveInterrupt_Index_Arr[spi]]=(uint16_t)SPI->SPI_DR;
-	/*Incrementing the index of received data*/
-	ReceiveInterrupt_Index_Arr[spi]++;
-	/*Checking on the index of received data if it reached maximum*/
-	if(ReceiveInterrupt_Index_Arr[spi]==ReceiveInterrupt_Size_Arr[spi])
+
+	/*Checking on the index of received data of next reception if it reached maximum*/
+	if(ReceiveInterrupt_Index_Arr[spi]>=ReceiveInterrupt_Size_Arr[spi])
 	{
 		/*Re-assigin the index of received data to zero*/
 		ReceiveInterrupt_Index_Arr[spi]=0;
+		/*Checking on the continuous receiving parameter*/
+		if(ReceiveInterrupt_Circular_Arr[spi]==CIRCULAR_DISABLE)
+		{
+			/*Stop receiving any further data*/
+			SPI_ReceiveInterruptDisable(spi);
+		}
+		else
+		{
+			/*Reading data from SPI data register to the pointer of reception data*/
+			ReceiveInterrupt_Ptrs_Arr[spi][ReceiveInterrupt_Index_Arr[spi]]=(uint16_t)SPI->SPI_DR;
+			/*Incrementing the index of received data*/
+			ReceiveInterrupt_Index_Arr[spi]++;
+		}
+	}
+	else
+	{
+		/*Reading data from SPI data register to the pointer of reception data*/
+		ReceiveInterrupt_Ptrs_Arr[spi][ReceiveInterrupt_Index_Arr[spi]]=(uint16_t)SPI->SPI_DR;
+		/*Incrementing the index of received data*/
+		ReceiveInterrupt_Index_Arr[spi]++;
 	}
 }
 
@@ -547,15 +592,17 @@ static void SPI_ReceiveNoBlock(SPI_t spi)
 /**********************************		IRQs	 ********************************/
 void SPI1_IRQHandler(void)
 {
+	uint32_t SR_Reg=SPI1->SPI_SR;
+	uint32_t CR2_Reg=SPI1->SPI_CR2;
 	/*Checking the transmit buffer to be empty and Checking on the transmit interrupt enable bit*/
-	if((((SPI1->SPI_SR)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
-	   (((SPI1->SPI_CR2)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
 	{
 		 SPI_TransmitNoBlock(SPI_1);
 	}
 	/*Checking the receive buffer to be full and Checking on the receive interrupt enable bit*/
-	if((((SPI1->SPI_SR)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
-	   (((SPI1->SPI_CR2)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
 	{
 		SPI_ReceiveNoBlock(SPI_1);
 	}
@@ -563,15 +610,17 @@ void SPI1_IRQHandler(void)
 
 void SPI2_IRQHandler(void)
 {
+	uint32_t SR_Reg=SPI2->SPI_SR;
+	uint32_t CR2_Reg=SPI2->SPI_CR2;
 	/*Checking the transmit buffer to be empty and Checking on the transmit interrupt enable bit*/
-	if((((SPI2->SPI_SR)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
-	   (((SPI2->SPI_CR2)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
 	{
 		 SPI_TransmitNoBlock(SPI_2);
 	}
 	/*Checking the receive buffer to be full and Checking on the receive interrupt enable bit*/
-	if((((SPI2->SPI_SR)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
-	   (((SPI2->SPI_CR2)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
 	{
 		SPI_ReceiveNoBlock(SPI_2);
 	}
@@ -579,15 +628,17 @@ void SPI2_IRQHandler(void)
 
 void SPI3_IRQHandler(void)
 {
+	uint32_t SR_Reg=SPI3->SPI_SR;
+	uint32_t CR2_Reg=SPI3->SPI_CR2;
 	/*Checking the transmit buffer to be empty and Checking on the transmit interrupt enable bit*/
-	if((((SPI3->SPI_SR)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
-	   (((SPI3->SPI_CR2)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
 	{
 		 SPI_TransmitNoBlock(SPI_3);
 	}
 	/*Checking the receive buffer to be full and Checking on the receive interrupt enable bit*/
-	if((((SPI3->SPI_SR)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
-	   (((SPI3->SPI_CR2)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
 	{
 		SPI_ReceiveNoBlock(SPI_3);
 	}
@@ -595,15 +646,17 @@ void SPI3_IRQHandler(void)
 
 void SPI4_IRQHandler(void)
 {
+	uint32_t SR_Reg=SPI4->SPI_SR;
+	uint32_t CR2_Reg=SPI4->SPI_CR2;
 	/*Checking the transmit buffer to be empty and Checking on the transmit interrupt enable bit*/
-	if((((SPI4->SPI_SR)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
-	   (((SPI4->SPI_CR2)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_TRAN_BUFFER_EMPTY_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_TRAN_IT_EN_BIT_ACCESS)&1))
 	{
 		 SPI_TransmitNoBlock(SPI_4);
 	}
 	/*Checking the receive buffer to be full and Checking on the receive interrupt enable bit*/
-	if((((SPI4->SPI_SR)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
-	   (((SPI4->SPI_CR2)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
+	if((((SR_Reg)>>SPI_RECE_BUFFER_FULL_BIT_ACCESS)&1) &&
+	   (((CR2_Reg)>>SPI_RECE_IT_EN_BIT_ACCESS)&1))
 	{
 		SPI_ReceiveNoBlock(SPI_4);
 	}

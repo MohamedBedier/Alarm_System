@@ -66,6 +66,14 @@ typedef enum
 }SPI_Prescaler_t;
 
 
+/*@SPI_Circular_t*/
+typedef enum
+{
+	CIRCULAR_ENABLE=0,
+	CIRCULAR_DISABLE,
+}SPI_Circular_t;
+
+
 typedef struct
 {
 	SPI_t SPI;
@@ -88,9 +96,9 @@ ErrorStatus_t SPI_SendSync(SPI_t spi, uint16_t data);
 ErrorStatus_t SPI_ReceiveSync(SPI_t spi, uint16_t* data);
 uint8_t SPI_SendPeriodic(SPI_t spi, uint16_t data);
 uint8_t SPI_ReceivePeriodic(SPI_t spi, uint16_t* data);
-ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize);
+ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize, SPI_Circular_t Cir);
 ErrorStatus_t SPI_TransmitInterruptDisable(SPI_t spi);
-ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize);
+ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t DataSize, SPI_Circular_t Cir);
 ErrorStatus_t SPI_ReceiveInterruptDisable(SPI_t spi);
 
 #endif /* SPI_INTERFACE_H_ */
