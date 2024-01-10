@@ -7,22 +7,33 @@ The LED Driver presented here is designed to provide a simple and effective mean
  
 ## **********  Function Descriptions  **********  
 
-1- **LED_u8LedTurnON:**
-This function configures the LED to turn ON based on the provided LED configuration. 
+1- **LED_u8PinInit:**
+This function configures the LED to Initialization Led based on the provided LED configuration struct. 
 	## parameter:
-	- 'puFrom_LED_Config' : this is a pointer of struct which carrying LED configuration.
+	- 'PinConfig' : this is a pointer of struct which carrying LED configuration.
 	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
 
-2- **LED_u8LedTurnOff:** 
-This function configures the LED to turn OFF based on the provided LED configuration. 
+2- **LED_u8LedTurnON:**
+This function configures the LED to turn ON.
 	## parameter:
-	- 'puFrom_LED_Config' : this is a pointer of struct which carrying LED configuration.
+	- 'Copy_EnumLedPort' : This is an enum which carrying Led Port.
+	- 'Copy_EnumLedPin'  : This is an enum which carrying Led Pin.
+	- 'Copy_EnumLED_u8ConnectionType' : THIS enum which carrying connection type of the led.
+	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
+
+3- **LED_u8LedTurnOff:** 
+This function configures the LED to turn OFF.
+	## parameter:
+	- 'Copy_EnumLedPort' : This is an enum which carrying Led Port.
+	- 'Copy_EnumLedPin'  : This is an enum which carrying Led Pin.
+	- 'Copy_EnumLED_u8ConnectionType' : THIS enum which carrying connection type of the led.
 	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
  
-3- **LED_u8LEDToggle:** 
-This function toggles the state of the LED based on the provided LED configuration. 
+4- **LED_u8LEDToggle:** 
+This function toggles the state of the LED.
 	## parameter:
-	- 'puFrom_LED_Config' : this is a pointer of struct which carrying LED configuration.
+	- 'Copy_EnumLedPort' : This is an enum which carrying Led Port.
+	- 'Copy_EnumLedPin'  : This is an enum which carrying Led Pin.
 	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
  
 ## **********  Usage ********** 

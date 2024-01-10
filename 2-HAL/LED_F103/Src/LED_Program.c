@@ -15,7 +15,6 @@
 
 #include "GPIO_interface.h"
 
-
 #include "LED_Private.h"
 #include "LED_Interface.h"
 
@@ -45,27 +44,29 @@ uint8_t LED_u8PinInit(PinConfig_t *PinConfig)
 
 /**
  * @brief: this a function to Turn Led ON
- * @param[in] puFrom_LED_Struct : pointer from LED_Struct to configure led port and pin and connection type
+ * @param[in] Copy_EnumLedPort : This is an enum which carrying Led Port
+ * @param[in] Copy_EnumLedPin : This is an enum which carrying Led Pin
+ * @param[in] Copy_EnumLED_u8ConnectionType : THIS enum which carrying connection type of the led
  * @retval : Local_u8ErrorState : This is a variable to carry ErrorState value
  */
-uint8_t  LED_u8LedTurnON(LED_Struct *puFrom_LED_Struct)
+uint8_t  LED_u8LedTurnON(Port_t  Copy_EnumLedPort ,Pin_t  Copy_EnumLedPin , LED_u8ConnectionType_t Copy_EnumLED_u8ConnectionType)
 {
 	/* define a variable to carry ErrorState value */
 	uint8_t Local_u8ErrorState = OK;
 
-	/* check on pointer 'puFrom_LED_Struct' if not refer to NULL  */
-	if(puFrom_LED_Struct != NULL)
+	/* Check on port and pin range  */
+	if((Copy_EnumLedPort >= PORTA && Copy_EnumLedPort <= PORTG )&& (Copy_EnumLedPin >= PIN0 && Copy_EnumLedPin <= PIN15 ))
 	{
 		/* Check on Led connection  SOURCE_CONNECTION or SINK_CONNECTION */
-		if((puFrom_LED_Struct -> LED_u8ConnectionType) == SOURCE_CONNECTION)
+		if(Copy_EnumLED_u8ConnectionType == SOURCE_CONNECTION)
 		{
 			/* set as SOURCE_CONNECTION (power from MC) */
-			GPIO_u8SetPinValue((puFrom_LED_Struct -> LED_u8PORT) , (puFrom_LED_Struct -> LED_u8PIN) ,PIN_HIGH);
+			GPIO_u8SetPinValue(Copy_EnumLedPort , Copy_EnumLedPin ,PIN_HIGH);
 
-		}else if (puFrom_LED_Struct -> LED_u8ConnectionType == SINK_CONNECTION)
+		}else if (Copy_EnumLED_u8ConnectionType == SINK_CONNECTION)
 		{
 			/* set as SOURCE_CONNECTION (power from external component) */
-			GPIO_u8SetPinValue((puFrom_LED_Struct -> LED_u8PORT) , (puFrom_LED_Struct -> LED_u8PIN) , PIN_LOW);
+			GPIO_u8SetPinValue(Copy_EnumLedPort , Copy_EnumLedPin , PIN_LOW);
 
 		}else
 		{
@@ -75,7 +76,7 @@ uint8_t  LED_u8LedTurnON(LED_Struct *puFrom_LED_Struct)
 	}else
 	{
 		/* Update Local_u8ErrorState */
-		Local_u8ErrorState = NULL_PTR_ERR;
+		Local_u8ErrorState =NOK;
 	}
 
 	return Local_u8ErrorState ;
@@ -83,27 +84,29 @@ uint8_t  LED_u8LedTurnON(LED_Struct *puFrom_LED_Struct)
 
 /**
  * @brief: this a function to Turn Led off
- * @param[in] puFrom_LED_Struct : pointer from LED_Struct to configure led port and pin and connection type
+ * @param[in] Copy_EnumLedPort : This is an enum which carrying Led Port
+ * @param[in] Copy_EnumLedPin : This is an enum which carrying Led Pin
+ * @param[in] Copy_EnumLED_u8ConnectionType : THIS enum which carrying connection type of the led
  * @retval : Local_u8ErrorState : This is a variable to carry ErrorState value
  */
-uint8_t  LED_u8LedTurnOff(LED_Struct *puFrom_LED_Struct)
+uint8_t  LED_u8LedTurnOff(Port_t  Copy_EnumLedPort ,Pin_t  Copy_EnumLedPin, LED_u8ConnectionType_t Copy_EnumLED_u8ConnectionType)
 {
 	/* define a variable to carry ErrorState value */
 	uint8_t Local_u8ErrorState = OK;
 
-	/* check on pointer 'puFrom_LED_Struct' if not refer to NULL  */
-	if(puFrom_LED_Struct != NULL)
+	/* Check on port and pin range  */
+	if((Copy_EnumLedPort >= PORTA && Copy_EnumLedPort <= PORTG )&& (Copy_EnumLedPin >= PIN0 && Copy_EnumLedPin <= PIN15 ))
 	{
 		/* Check on Led connection  SOURCE_CONNECTION or SINK_CONNECTION */
-		if((puFrom_LED_Struct -> LED_u8ConnectionType) == SOURCE_CONNECTION)
+		if(Copy_EnumLED_u8ConnectionType == SOURCE_CONNECTION)
 		{
 			/* set as SOURCE_CONNECTION (power from MC) */
-			GPIO_u8SetPinValue((puFrom_LED_Struct -> LED_u8PORT) , (puFrom_LED_Struct -> LED_u8PIN) ,PIN_LOW );
+			GPIO_u8SetPinValue(Copy_EnumLedPort , Copy_EnumLedPin ,PIN_LOW );
 
-		}else if (puFrom_LED_Struct -> LED_u8ConnectionType == SINK_CONNECTION)
+		}else if (Copy_EnumLED_u8ConnectionType == SINK_CONNECTION)
 		{
 			/* set as SOURCE_CONNECTION (power from external component) */
-			GPIO_u8SetPinValue((puFrom_LED_Struct -> LED_u8PORT) , (puFrom_LED_Struct -> LED_u8PIN) ,PIN_HIGH );
+			GPIO_u8SetPinValue(Copy_EnumLedPort , Copy_EnumLedPin ,PIN_HIGH );
 
 		}else
 		{
@@ -113,31 +116,32 @@ uint8_t  LED_u8LedTurnOff(LED_Struct *puFrom_LED_Struct)
 	}else
 	{
 		/* Update Local_u8ErrorState */
-		Local_u8ErrorState = NULL_PTR_ERR;
+		Local_u8ErrorState =NOK;
 	}
-
 	return Local_u8ErrorState ;
 }
+
 /**
  * @brief: this a function to toggle Led
- * @param[in] puFrom_LED_Struct : pointer from LED_Struct to configure led port and pin and connection type
+ * @param[in] Copy_EnumLedPort : This is an enum which carrying Led Port
+ * @param[in] Copy_EnumLedPin : This is an enum which carrying Led Pin
  * @retval : Local_u8ErrorState : This is a variable to carry ErrorState value
  */
-uint8_t LED_u8ToggleLed(LED_Struct *puFrom_LED_Struct)
+uint8_t LED_u8ToggleLed(Port_t  Copy_EnumLedPort ,Pin_t  Copy_EnumLedPin)
 {
+
 	/* define a variable to carry ErrorState value */
 	uint8_t Local_u8ErrorState = OK;
-	/* check on pointer 'puFrom_LED_Struct' if not refer to NULL  */
-	if(puFrom_LED_Struct != NULL)
+
+	/* Check on port and pin range  */
+	if((Copy_EnumLedPort >= PORTA && Copy_EnumLedPort <= PORTG )&& (Copy_EnumLedPin >= PIN0 && Copy_EnumLedPin <= PIN15 ))
 	{
 		/* toggle led if it is high convert to low and if it is low convert to high */
-		GPIO_u8TogglePinValue((puFrom_LED_Struct->LED_u8PORT),(puFrom_LED_Struct->LED_u8PIN));
-
+		GPIO_u8TogglePinValue(Copy_EnumLedPort,Copy_EnumLedPin);
 	}else
 	{
 		/* Update Local_u8ErrorState */
-		Local_u8ErrorState = NULL_PTR_ERR;
+		Local_u8ErrorState =NOK;
 	}
-
-	return Local_u8ErrorState ;
+	return Local_u8ErrorState;
 }
