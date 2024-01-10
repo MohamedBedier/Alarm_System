@@ -35,6 +35,21 @@ This function reads the current state of a GPIO pin.
 	- 'PinNum' : to determine the Pin Name.
 	- 'PinVal' : this is a pointer to uint8_t to carry value of pin
 	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
+	
+5- **GPIO_u8SetPortValue:**
+The function is used to set value on a complete port.
+	## parameters:
+	- 'Port' : to determine the port Name.
+	- 'Copy_u32Value' : this variable is used to carry the value which put into port.
+	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
+	
+6- **GPIO_u8SetEXTIPort:**
+This function to Set EXTI port AND line.
+	## parameters:
+	- 'Port' : to determine the port Name.
+	- 'Copy_EnumExti_Line' : this enum to carry options of EXTI lines options from line 0 to line 19 totally 20 EXTI_lines.
+	- **Returns:**  'Local_u8ErrorState'  indicating any errors during execution.
+		
 
 	
 ## *********  Usage  ********* 

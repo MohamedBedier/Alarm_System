@@ -33,5 +33,5 @@
 #define ODR_MASK  1u
 #define IDR_MASK  1u
 
-
+#define  MASKED_FOUR_BITS  4u
 #endif

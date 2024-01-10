@@ -14,6 +14,36 @@
 #ifndef  GPIO_INTERFACE_H_
 #define  GPIO_INTERFACE_H_
 
+
+/**
+ * @brief : this enum to carry EXTI lines options from line 0 to line 22 totally 23 EXTI_lines
+ */
+typedef enum
+{
+  Line0=0,/**< SYSCFG_Line0 */
+  Line1,  /**< SYSCFG_Line1 */
+  Line2,  /**< SYSCFG_Line2 */
+  Line3,  /**< SYSCFG_Line3 */
+  Line4,  /**< SYSCFG_Line4 */
+  Line5,  /**< SYSCFG_Line5 */
+  Line6,  /**< SYSCFG_Line6 */
+  Line7,  /**< SYSCFG_Line7 */
+  Line8,  /**< SYSCFG_Line8 */
+  Line9,  /**< SYSCFG_Line9 */
+  Line10, /**< SYSCFG_Line10 */
+  Line11, /**< SYSCFG_Line11 */
+  Line12, /**< SYSCFG_Line12 */
+  Line13, /**< SYSCFG_Line13 */
+  Line14, /**< SYSCFG_Line14 */
+  Line15, /**< SYSCFG_Line15 */
+  Line16, /**< SYSCFG_Line16 */
+  Line17, /**< SYSCFG_Line17 */
+  Line18, /**< SYSCFG_Line18 */
+  Line19
+
+}EXTI_Lines_t;
+
+
 /**
  * @brief this enum carries name of ports
  */
@@ -145,5 +175,21 @@ uint8_t  GPIO_u8TogglePinValue(Port_t Port , Pin_t PinNum );
  */
 uint8_t  GPIO_u8ReadPinValue(Port_t Port , Pin_t PinNum ,PinVal_t* PinVal);
 
+/**
+ *   @fn         GPIO_u8SetPortValue
+ *   @brief      The function is used to set value on a complete port
+ *   @param[in]  Port: The port number, get options @Port_t enum
+ *   @param[in]  Copy_u32Value: this variable is used to carry the value which put into port
+ *   @retVal     Local_u8ErrorState
+ */
+uint8_t GPIO_u8SetPortValue(uint8_t Copy_u8Port  ,uint32_t Copy_u32Value);
+
+/**
+ * @brief: This function to Set EXTI port AND line
+ * @param[in] Copy_EnumExti_Line : this enum to carry options of EXTI lines options from line 0 to line 19 totally 20 EXTI_lines
+ * @param[in] Copy_EnumPORT : this enum to carry options from PORTA TO PORTG
+ * @return Local_u8ErrorState : this variable to carry ErrorState value
+ */
+uint8_t GPIO_u8SetEXTIPort(EXTI_Lines_t Copy_EnumExti_Line , Port_t Copy_EnumPORT);
 
 #endif
