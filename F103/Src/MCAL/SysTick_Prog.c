@@ -12,9 +12,10 @@
 #include <SysTick_prv.h>
 
 
-
+/**********************************		GLOBAL VARIABLES	 ********************************/
 static uint8_t u8FCPU_ValueMHZ;
 static Fptr SysTick_Fptr;
+
 
 /***********************************************************
 * @fn SysTick_Init
@@ -63,7 +64,7 @@ void SysTick_Delayus(uint32_t u32LocalTime_us)
 	/*Enable Counting*/
 	SYSTICK->SYST_CSR|=SYSTICK_BIT_ACCESS<<ENABLE;
 	/*Waiting till finishing counting*/
-	while(!(((SYSTICK->SYST_CSR)>>COUNTFLAG)&SYSTICK_BIT_ACCESS));
+    while(!(((SYSTICK->SYST_CSR)>>COUNTFLAG)&SYSTICK_BIT_ACCESS)){};
 	/*Disable Counting*/
 	SYSTICK->SYST_CSR&=~(SYSTICK_BIT_ACCESS<<ENABLE);
 }
