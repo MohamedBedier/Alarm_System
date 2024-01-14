@@ -7,6 +7,10 @@
 
 #define  SYSTICK_BASE_ADDRESS  0xE000E010U
 
+#define     I2C1_BASE_ADDRESS        0x40005400U
+#define     I2C2_BASE_ADDRESS        0x40005800U
+#define     I2C3_BASE_ADDRESS        0x40005C00U
+
 
 /************************		APB1 BASE ADRESSES		************************/
 
@@ -44,6 +48,21 @@ typedef struct
 	volatile uint32_t SYST_CALIB;
 }SysTick_RegDef_t;
 
+/************************		I2C RESISTER STRUCTURE		************************/
+
+typedef struct
+{
+	volatile uint32_t I2C_CR1;
+	volatile uint32_t I2C_CR2;
+	volatile uint32_t I2C_OAR1;
+	volatile uint32_t I2C_OAR2;
+	volatile uint32_t I2C_DR;
+	volatile uint32_t I2C_SR1;
+	volatile uint32_t I2C_SR2;
+	volatile uint32_t I2C_CCR;
+	volatile uint32_t I2C_TRISE;
+	volatile uint32_t I2C_FLTR;
+}I2C_RegDef_t;
 
 
 
@@ -69,5 +88,13 @@ typedef struct
 #define SPI2          ((SPI_RegDef_t*)SPI2_BASE_ADDRESS)
 #define SPI3          ((SPI_RegDef_t*)SPI3_BASE_ADDRESS)
 #define SPI4          ((SPI_RegDef_t*)SPI4_BASE_ADDRESS)
+
+/************************		I2C Peripheral Definitions		************************/
+#define I2C1          ((I2C_RegDef_t*)I2C1_BASE_ADDRESS)
+#define I2C2          ((I2C_RegDef_t*)I2C2_BASE_ADDRESS)
+#define I2C3          ((I2C_RegDef_t*)I2C3_BASE_ADDRESS)
+
+
+
 
 #endif
