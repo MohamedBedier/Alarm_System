@@ -35,6 +35,8 @@ typedef struct
 #define NVIC_IPR       ((volatile uint8_t*) 0xE000E400)
 #define NVIC_STIR      ((volatile uint32_t*)0xE000EF00)
 
+/************************		SysCFG Peripheral Definitions		************************/
+#define SYSCFG_EXTICR      ((volatile uint32_t*)0x40013808)
 
 
 #endif
