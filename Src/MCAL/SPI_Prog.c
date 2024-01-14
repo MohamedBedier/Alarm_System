@@ -13,15 +13,15 @@
 
 
 /**********************************		GLOBAL VARIABLES	 ********************************/
-static uint16_t* ReceiveInterrupt_Ptrs_Arr[4];
-static uint32_t  ReceiveInterrupt_Size_Arr[4];
-static uint32_t  ReceiveInterrupt_Index_Arr[4];
-static SPI_Circular_t  ReceiveInterrupt_Circular_Arr[4];
+static uint16_t* ReceiveInterrupt_Ptrs_Arr[TOTAL_SPI];
+static uint32_t  ReceiveInterrupt_Size_Arr[TOTAL_SPI];
+static uint32_t  ReceiveInterrupt_Index_Arr[TOTAL_SPI];
+static SPI_Circular_t  ReceiveInterrupt_Circular_Arr[TOTAL_SPI];
 
-static uint16_t* TransmitInterrupt_Ptrs_Arr[4];
-static uint32_t  TransmitInterrupt_Size_Arr[4];
-static uint32_t  TransmitInterrupt_Index_Arr[4];
-static SPI_Circular_t  TransmitInterrupt_Circular_Arr[4];
+static uint16_t* TransmitInterrupt_Ptrs_Arr[TOTAL_SPI];
+static uint32_t  TransmitInterrupt_Size_Arr[TOTAL_SPI];
+static uint32_t  TransmitInterrupt_Index_Arr[TOTAL_SPI];
+static SPI_Circular_t  TransmitInterrupt_Circular_Arr[TOTAL_SPI];
 
 
 
@@ -40,7 +40,7 @@ ErrorStatus_t SPI_voidInit(const SPIConfig_t* SPIConfig)
 		ErrorState=NULLPTR;
 	}
 	/*Checking on the SPIConfig parameters values*/
-	else if(SPIConfig->SPI>SPI_4|| SPIConfig->Prescaler>FCLK_256 || SPIConfig->DataFrame>SPI_16_BITS ||
+	else if(SPIConfig->SPI>=TOTAL_SPI|| SPIConfig->Prescaler>FCLK_256 || SPIConfig->DataFrame>SPI_16_BITS ||
 			SPIConfig->First_LSB>LSB_FIRST || SPIConfig->Master>SPI_MASTER || SPIConfig->SW_SlvMng>SW_SLV_MNG_ENABLE)
 	{
 		ErrorState=OUT_OF_RANGE;
@@ -99,6 +99,8 @@ static SPI_RegDef_t* SPI_SelcetPeripheral(SPI_t spi)
 			break;
 		case SPI_4:
 			SPI=SPI4;
+		default:
+			SPI=NullPtr;
 	}
 	return SPI;
 }
@@ -113,7 +115,7 @@ ErrorStatus_t SPI_Enable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -139,7 +141,7 @@ ErrorStatus_t SPI_Disable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -166,7 +168,7 @@ ErrorStatus_t SPI_SW_NSS_Pin(SPI_t spi, SPI_SW_NSS_Pin_t nssPin)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi and nssPin values*/
-	if(spi>SPI_4 || nssPin>SW_NSS_HIGH)
+	if(spi>=TOTAL_SPI || nssPin>SW_NSS_HIGH)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -193,7 +195,7 @@ ErrorStatus_t SPI_DMA_TransmitEnable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -219,7 +221,7 @@ ErrorStatus_t SPI_DMA_ReceiveEnable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -246,7 +248,7 @@ ErrorStatus_t SPI_SendSync(SPI_t spi, uint16_t data)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -275,7 +277,7 @@ ErrorStatus_t SPI_ReceiveSync(SPI_t spi, uint16_t* data)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -359,7 +361,7 @@ ErrorStatus_t SPI_TransmitInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -403,7 +405,7 @@ ErrorStatus_t SPI_TransmitInterruptDisable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -434,7 +436,7 @@ ErrorStatus_t SPI_ReceiveInterruptEnable(SPI_t spi, uint16_t* DataPtr, uint32_t 
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}
@@ -478,7 +480,7 @@ ErrorStatus_t SPI_ReceiveInterruptDisable(SPI_t spi)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on spi value*/
-	if(spi>SPI_4)
+	if(spi>=TOTAL_SPI)
 	{
 		ErrorState=OUT_OF_RANGE;
 	}

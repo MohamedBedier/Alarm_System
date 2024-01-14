@@ -12,14 +12,17 @@
 #include <DMA_Interface.h>
 #include <RCC_Interface.h>
 #include <NVIC_Interface.h>
+#include <RTC_Wrapper.h>
 
 #include <DS1307_Interface.h>
 #include <DS1307_prv.h>
 #include <DS1307_cfg.h>
 
 
+/**********************************		GLOBAL VARIABLES	 ********************************/
 static DS_Time_t DS_Time;
 static 	NVIC_IRQ_t I2C_EV_IRQ, I2C_ER_IRQ;
+
 
 /***********************************************************
 * @fn DS1307_voidInit
@@ -374,24 +377,24 @@ void DS1307_TimeSetting_Init(uint8_t OwnAddress, uint32_t F_SCL_HZ)
 * @param[in] TimeOut : Run time out for protection from blocking
 * @retval ErrorStatus_t, Options at @ErrorStatus_t enum
 ***********************************************************/
-ErrorStatus_t DS1307_RunTimeSetting(uint32_t TimeOut)
+ErrorStatus_t DS1307_RunTimeSetting(DS_Time_t SetTime, DS1307_AmPm_t AmPM, DS1307_Style_t HourStyle, uint32_t TimeOut)
 {
 	ErrorStatus_t ErrorState=OK;
 
 	/*Adjusting the time data provided by the user in the DS1307_cfg.h file to be readable by
-	  The RTC driver as provided in the datasheet*/
+	  The RTC driver as provided in the dataSheet*/
 	DS_Time_t NowTime=
 	{
 		.PointerRegister=0,
-		.Seconds=(NOW_SECONDS%10)|((NOW_SECONDS/10)<<4),
-		.Minutes=(NOW_MINUTES%10)|((NOW_MINUTES/10)<<4),
+		.Seconds=(SetTime.Seconds%10)|((SetTime.Seconds/10)<<4),
+		.Minutes=(SetTime.Minutes%10)|((SetTime.Minutes/10)<<4),
 		.Hours=(NOW_HOURS_STYLE==STYELE_12H)?\
-			   (NOW_HOURS%10)|((NOW_HOURS/10)<<4)|(NOW_AM_PM<<5)|(STYELE_12H<<6):\
-			   (NOW_HOURS%10)|((NOW_HOURS/10)<<4),
-		.Day=NOW_DAY,
-		.Date=(NOW_DATE%10)|((NOW_DATE/10)<<4),
-		.Month=(NOW_MONTH%10)|((NOW_MONTH/10)<<4),
-		.Year=((NOW_YEAR-2000)%10)|(((NOW_YEAR-2000)/10)<<4)
+			   (SetTime.Hours%10)|((SetTime.Hours/10)<<4)|(AmPM<<5)|(STYELE_12H<<6):\
+			   (SetTime.Hours%10)|((SetTime.Hours/10)<<4),
+		.Day=SetTime.Day,
+		.Date=(SetTime.Date%10)|((SetTime.Date/10)<<4),
+		.Month=(SetTime.Month%10)|((SetTime.Month/10)<<4),
+		.Year=((SetTime.Year)%10)|(((SetTime.Year)/10)<<4)
 	};
 
 	/*Enabling I2C peripheral*/
@@ -435,7 +438,7 @@ ErrorStatus_t DS1307_GetNowTime(NowTime_t TimeType, uint16_t* NowTime, uint16_t*
 		{
 			/*Returning the value whether it was Am or Pm*/
 			*Now_pm_am=((DS_TimePtr[TimeType])>>5)&1;
-			/*Clearing the Am_Pm bit to not get it into calculation of time*/
+			/*Clearing the Am_Pm and 12/24 time style bits to not get them into calculation of time*/
 			DS_TimePtr[TimeType]&=~(0b1<<5);
 			DS_TimePtr[TimeType]&=~(0b1<<6);
 		}

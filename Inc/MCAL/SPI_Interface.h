@@ -15,6 +15,7 @@ typedef enum
 	SPI_2,
 	SPI_3,
 	SPI_4,
+	TOTAL_SPI
 }SPI_t;
 
 /*@SPI_DataFormat_t*/

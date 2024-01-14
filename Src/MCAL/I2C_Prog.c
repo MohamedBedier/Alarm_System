@@ -5,9 +5,10 @@
 ***********************************************************/
 
 #include <stdint.h>
+#include <cnfg.h>
 #include <Stm32F446xx.h>
 #include <ErrType.h>
-#include <cnfg.h>
+#include <I2C_Wrapper.h>
 
 #include <I2C_Interface.h>
 #include <I2C_prv.h>
@@ -19,6 +20,7 @@ static volatile uint8_t Slave_IT_TransmitIndexs[TOTAL_I2C], Slave_IT_ReceiveInde
 static volatile uint8_t *Slave_IT_PdataTransmit[TOTAL_I2C], *Slave_IT_PdataReceive[TOTAL_I2C];
 static uint8_t Slave_IT_SizeTransmit[TOTAL_I2C], Slave_IT_SizeReceive[TOTAL_I2C];
 static volatile uint8_t DMA_EOT_I2C1_Flag, DMA_EOT_I2C2_Flag, DMA_EOT_I2C3_Flag;
+
 
 /***********************************************************
 * @fn I2C_voidInit
