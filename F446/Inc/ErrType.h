@@ -27,6 +27,23 @@
 #define FLAG_IS_IDLE   0U
 #define FLAG_IS_BUSY   1U
 
+/////////////////////////////////////
+
+//@ErrorStatus_t
+typedef enum
+{
+	OK=0,
+	NOK,
+	NULLPTR,
+	OUT_OF_RANGE,
+	UNKNOWN,
+	RUNTIME_OUT
+}ErrorStatus_t;
+
+
+#define  NullPtr   ((void*)0)
+
+typedef void(*Fptr)(void);
 
 
 #endif /* DEFINES_H_ */
