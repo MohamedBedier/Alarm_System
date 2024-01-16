@@ -17,8 +17,6 @@
 #define RCC_CFGR_PLLMUL_MASK   0xFFC3FFFF
 #define RCC_CFGR_PLLMUL_POS    18u
 
-#define FLAG_RAISED  1u
-
 
 #define PLLM_FACT_MAX        63u
 #define PLLM_FACT_MIN        2u

@@ -30,6 +30,8 @@
 #define  GPIOF_BASE_ADDRESS   0x40011C00U
 #define  GPIOG_BASE_ADDRESS   0x40012000U
 
+#define  AFIO_BASE_ADDRESS     0x40010000U
+
 #define  SPI1_BASE_ADDRESS    0x40013000U
 
 
@@ -45,12 +47,19 @@ typedef  struct
 	volatile  uint32_t  BSRR;           /*GPIO PORT Bit set/Reset Register*/
 	volatile  uint32_t  BRR;            /*GPIO PORT Bit Reset Register*/
 	volatile  uint32_t  LCKR;           /*GPIO PORT Lock Register*/
+}GPIO_RegDef_t;
+
+
+/******************************    AFIO Register Definitions Structure  ******************************/
+
+typedef  struct
+{
 	volatile  uint32_t  AFIO_EVCR;      /* Event control register  */
 	volatile  uint32_t  AFIO_MAPR;      /* AF remap and debug I/O configuration register */
-	volatile  uint32_t  AFIO_EXTICR[4]; /* External interrupt configuration register 1,2,3,4 */	
+	volatile  uint32_t  AFIO_EXTICR[4]; /* External interrupt configuration register 1,2,3,4 */
 	volatile  uint32_t  AFIO_MAPR2;     /* AF remap and debug I/O configuration register2  */
+}AFIO_RegDef_t;
 
-}GPIO_RegDef_t;	
 
 /******************************    RCC Register Definitions Structure  ******************************/
 
@@ -99,10 +108,9 @@ typedef struct
 
 
 /******************************    RCC Peripheral Definitions       ******************************/
-#define  RCC     (RCC_Reg_t*)RCC_BASE_ADDRESS
+#define  RCC        ((RCC_Reg_t*)RCC_BASE_ADDRESS)
 
 /******************************    GPIO Peripheral Definitions       ******************************/
-
 #define   GPIOA     ((GPIO_RegDef_t*)GPIOA_BASE_ADDRESS)
 #define   GPIOB     ((GPIO_RegDef_t*)GPIOB_BASE_ADDRESS)
 #define   GPIOC     ((GPIO_RegDef_t*)GPIOC_BASE_ADDRESS)
@@ -110,6 +118,9 @@ typedef struct
 #define   GPIOE     ((GPIO_RegDef_t*)GPIOE_BASE_ADDRESS)
 #define   GPIOF     ((GPIO_RegDef_t*)GPIOF_BASE_ADDRESS)
 #define   GPIOG     ((GPIO_RegDef_t*)GPIOG_BASE_ADDRESS)
+
+/******************************    AFIO Peripheral Definitions       ******************************/
+#define   AFIO      ((AFIO_RegDef_t*)AFIO_BASE_ADDRESS)
 
 /************************		SysTick Peripheral Definitions		************************/
 #define SYSTICK        ((SysTick_RegDef_t*)SYSTICK_BASE_ADDRESS)

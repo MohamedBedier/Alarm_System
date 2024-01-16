@@ -142,7 +142,7 @@ typedef struct
 	volatile uint32_t RCC_DCKCFGR2;     /* RCC dedicated clocks configuration register 2  */
 }RCC_Reg_t;
 
-******************************    DMA Register Definitions   ******************************/
+/******************************     DMA Register Definitions    ******************************/
 
 typedef struct
 {
@@ -233,7 +233,7 @@ typedef struct
 #define    SCB		((SCB_Reg_t *)(SCB_BASE_ADDRESS))
 
 /******************************    RCC structure pointer **********************/
-#define    RCC      (RCC_Reg_t*)RCC_BASE_ADDRESS
+#define    RCC      ((RCC_Reg_t*)RCC_BASE_ADDRESS)
 
 /******************* DMAs structure pointer **********************/
 #define    DMA1		((DMA_RegDef_t*)(DMA1_BASE_ADDRESS))

@@ -11,17 +11,15 @@
 #include <DoTasks_cfg.h>
 #include <GetTime.h>
 #include <SendData.h>
+#include <LogInAndMenuOptions.h>
 #include <CompareTime.h>
 
 
 /**********************************		GLOBAL VARIABLES	 ********************************/
 extern NowTimeStruct_t NowTime_Struct;
-NowTimeStruct_t AlarmsArr[TOTAL_ALARMS]={{10, 54, 8, 4, 13, 1, 24, 0},
-										 {10, 56, 8, 4, 13, 1, 24, 0},
-		                                 {10, 57, 8, 4, 13, 1, 24, 0}};
+extern NowTimeStruct_t AlarmsArr[TOTAL_ALARMS];
 char* AlarmName;
-char* AlarmNamesArr[TOTAL_ALARMS]={"ABDULLAH","ALI","AL_SHARQAWY"};
-
+extern char AlarmNamesArr[TOTAL_ALARMS][15];
 
 
 /***********************************************************

@@ -4,7 +4,7 @@
 * @Brief The main file for SCB peripheral
 ***********************************************************/
 #include <stdint.h>
-#include <Stm32F103C8T6.h>
+#include <Stm32F103xx.h>
 #include <ErrType.h>
 #include <cnfg.h>
 
@@ -85,7 +85,7 @@ void SCB_voidDisableUnalignTrap(void)
 * @Param[in] priority : The system exception priority Options at @Priority_t enum
 * @retval ErrorStatus_t, Options at @ErrorStatus_t enum
 ***********************************************************/
-ErrorStatus_t SCB_voidSetPriority(SCB_IRQ_t IRQ_Name, Priority_t priority)
+ErrorStatus_t SCB_voidSetPriority(SCB_IRQ_t IRQ_Name, SupGroupPriority_t priority)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on the IRQ_Name value*/

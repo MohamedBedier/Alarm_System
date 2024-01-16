@@ -215,6 +215,11 @@ void ReceData_Init(void)
 	NVIC_EnableInterrupt(ReceDataSPI_IRQ);
 	/*Enabling global interrupt of the used line of EXTI peripheral*/
 	NVIC_EnableInterrupt(EXTI_Line_IRQ);
+
+	/*Wait till you receive first 2 bytes*/
+	uint16_t x;
+	SPI_ReceiveSync(RECEIVE_DATA_SPI, &x);
+	SysTick_Delayms(5);
 	/*Enabling receiving data over SPI via interrupt, received data will be loaded to the
 	 *NowTime_Struct struct and when it finished it will restart it self to keep receiving
 	 *new data bytes*/
@@ -256,8 +261,6 @@ static void ReceiveData_DoInstruction(void)
 	/*Re-Enabling receiving data over SPI via interrupt*/
 	SPI_ReceiveInterruptEnable(RECEIVE_DATA_SPI, &(NowTime_Struct.NowTimeSEC), RECEIVE_TIME_BYTES, CIRCULAR_ENABLE);
 }
-
-
 
 
 

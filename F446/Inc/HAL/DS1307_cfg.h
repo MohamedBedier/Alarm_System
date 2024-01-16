@@ -9,18 +9,18 @@
 #define DS1307_CFG_H_
 
 
-/*Choose between (DMA_1, DMA_2)*/
-#define  DS_DMA_RX  DMA_1
+/*Choose between (DMA1_SEL, DMA2_SEL)*/
+#define  DS_DMA_RX  DMA1_SEL
 
 
-/*Choose between (DMA_STREAM_0, DMA_STREAM_1, DMA_STREAM_2, DMA_STREAM_3,
-                * DMA_STREAM_4, DMA_STREAM_5, DMA_STREAM_6, DMA_STREAM_7)*/
-#define  DS_RX_STREAM   DMA_STREAM_2
+/*Choose between (DMA_STR0, DMA_STR1, DMA_STR2, DMA_STR3,
+                * DMA_STR4, DMA_STR5, DMA_STR6, DMA_STR7)*/
+#define  DS_RX_STREAM   DMA_STR2
 
 
-/*Choose between (DMA_CHANNEL_0, DMA_CHANNEL_1, DMA_CHANNEL_2, DMA_CHANNEL_3,
-                * DMA_CHANNEL_4, DMA_CHANNEL_5, DMA_CHANNEL_6, DMA_CHANNEL_7)*/
-#define  DS_RX_CHANNEL   DMA_CHANNEL_3
+/*Choose between (DMA_CH0, DMA_CH1, DMA_CH2, DMA_CH3,
+                * DMA_CH4, DMA_CH5, DMA_CH6, DMA_CH7)*/
+#define  DS_RX_CHANNEL   DMA_CH3
 
 
 /*Choose between (I2C_1, I2C_2, I2C_3)*/
@@ -41,6 +41,8 @@
 /*Choose between (AF0, AF1, AF2, AF3, AF4, AF5, AF6, AF7, AF8,
  *                AF9, AF10, AF11, AF12, AF13, AF14, AF15)*/
 #define  DS_ALT_FUNC   AF4
+
+
 
 
 /*Choose between

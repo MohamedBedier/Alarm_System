@@ -23,7 +23,7 @@ void SCB_voidEnableZeroDivTrap(void);
 void SCB_voidDisableZeroDivTrap(void);
 void SCB_voidEnableUnalignTrap(void);
 void SCB_voidDisableUnalignTrap(void);
-ErrorStatus_t SCB_voidSetPriority(SCB_IRQ_t IRQ_Name, Priority_t priority);
+ErrorStatus_t SCB_voidSetPriority(SCB_IRQ_t IRQ_Name, SupGroupPriority_t priority);
 void SCB_voidEnableUsageFault(void);
 void SCB_voidDisableUsageFault(void);
 void SCB_voidEnableBusFault(void);

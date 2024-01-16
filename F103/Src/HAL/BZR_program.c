@@ -47,15 +47,15 @@ uint8_t BZR_u8Init(PinConfig_t * BUZZER_Configs)
  * @param[in] Copy_EnumLedPin : This is an enum which carrying Led Pin
  * @retval : Local_u8ErrorState : This is a variable to carry ErrorState value
  */
-uint8_t BZR_u8TurnOn(Port_t  Copy_EnumBZRPort ,Pin_t  Copy_EnumBERPin)
+uint8_t BZR_u8TurnOn(Port_t  Copy_EnumBZRPort, Pin_t  Copy_EnumBZRPin)
 {
 	/* define the Error State variable */
 	uint8_t Local_u8ErrorState =OK;
 
-	if((Copy_EnumBZRPort >= PORTA && Copy_EnumBZRPort <= PORTG ) && (Copy_EnumBERPin >= PIN0 && Copy_EnumBERPin <= PIN15))
+	if((Copy_EnumBZRPort >= PORTA && Copy_EnumBZRPort <= PORTG ) && (Copy_EnumBZRPin >= PIN0 && Copy_EnumBZRPin <= PIN15))
 	{
 		/* Turn on  Buzzer on by put on its pin high */
-		GPIO_u8SetPinValue(Copy_EnumBZRPort,Copy_EnumBERPin, PIN_HIGH);
+		GPIO_u8SetPinValue(Copy_EnumBZRPort,Copy_EnumBZRPin, PIN_HIGH);
 	}else
 	{
 		/* update error state value */
@@ -75,10 +75,10 @@ uint8_t BZR_u8TurnOff(Port_t  Copy_EnumBZRPort ,Pin_t  Copy_EnumBZRPin)
 	/* define the Error State variable */
 	uint8_t Local_u8ErrorState =OK;
 
-	if((Copy_EnumBZRPort >= PORTA && Copy_EnumBZRPort <= PORTG ) && (Copy_EnumBERPin >= PIN0 && Copy_EnumBERPin <= PIN15))
+	if((Copy_EnumBZRPort >= PORTA && Copy_EnumBZRPort <= PORTG ) && (Copy_EnumBZRPin >= PIN0 && Copy_EnumBZRPin <= PIN15))
 	{
 		/* Turn on  Buzzer on by put on its pin high */
-		GPIO_u8SetPinValue(Copy_EnumBZRPort,Copy_EnumBERPin, PIN_LOW);
+		GPIO_u8SetPinValue(Copy_EnumBZRPort,Copy_EnumBZRPin, PIN_LOW);
 	}else
 	{
 		/* update error state value */

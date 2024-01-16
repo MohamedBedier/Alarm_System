@@ -5,7 +5,7 @@
 ***********************************************************/
 
 #include <stdint.h>
-#include <Stm32F103C8T6.h>
+#include <Stm32F103xx.h>
 #include <ErrType.h>
 
 #include <SPI_Interface.h>

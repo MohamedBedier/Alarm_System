@@ -5,7 +5,7 @@
 ***********************************************************/
 
 #include <stdint.h>
-#include <Stm32F103C8T6.h>
+#include <Stm32F103xx.h>
 #include <ErrType.h>
 #include <cnfg.h>
 
@@ -163,7 +163,7 @@ ActiveInterrrupt_t NVIC_GetActiveFlag(NVIC_IRQ_t IRQ_Name)
 * @Param[in] priority : The interrupt priority Options at @Priority_t enum
 * @retval ErrorStatus_t, Options at @ErrorStatus_t enum
 ***********************************************************/
-ErrorStatus_t NVIC_voidSetPriority(NVIC_IRQ_t IRQ_Name, Priority_t priority)
+ErrorStatus_t NVIC_voidSetPriority(NVIC_IRQ_t IRQ_Name, SupGroupPriority_t priority)
 {
 	ErrorStatus_t ErrorState=UNKNOWN;
 	/*Checking on the IRQ value*/

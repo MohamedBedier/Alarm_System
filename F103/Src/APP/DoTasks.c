@@ -30,7 +30,7 @@ extern char AlarmName[ALARM_LETTERS_NUM+1];
 
 static char* Days[]={"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 static char* Months[]={"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
+static uint8_t LedFlag=0;
 
 
 /***********************************************************
@@ -55,34 +55,37 @@ void Tasks_Init(void)
 ***********************************************************/
 void Screen_ShowTimeRunnable(void)
 {
-	Screen_SetCursor(0, 2);
-	Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeHOUR);
-	Screen_WriteString(":");
-	Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeMIN);
-	Screen_WriteString(":");
-	Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeSEC);
-	Screen_SetCursor(0, 11);
-	switch(NowTime_Struct.Now_pm_am)
+	if(LedFlag && NowTime_Struct.NowTimeYEAR!=0)
 	{
-		case NOW_PM:
-			Screen_WriteString(" PM");		break;
-		case NOW_AM:
-			Screen_WriteString(" AM");		break;
-	}
+		Screen_SetCursor(0, 2);
+		Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeHOUR);
+		Screen_WriteString(":");
+		Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeMIN);
+		Screen_WriteString(":");
+		Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeSEC);
+		Screen_SetCursor(0, 11);
+		switch(NowTime_Struct.Now_pm_am)
+		{
+			case NOW_PM:
+				Screen_WriteString(" PM");		break;
+			case NOW_AM:
+				Screen_WriteString(" AM");		break;
+		}
 
-	Screen_SetCursor(1, 1);
-	Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeDATE);
-	Screen_WriteString("-");
-	if(NowTime_Struct.NowTimeMONTH<=12)
-	{
-		Screen_WriteString(Months[NowTime_Struct.NowTimeMONTH-1]);
-	}
-	Screen_WriteString("-");
-	Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeYEAR);
-	Screen_SetCursor(1, 12);
-	if(NowTime_Struct.NowTimeDAY<=7)
-	{
-		Screen_WriteString(Days[NowTime_Struct.NowTimeDAY-1]);
+		Screen_SetCursor(1, 1);
+		Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeDATE);
+		Screen_WriteString("-");
+		if(NowTime_Struct.NowTimeMONTH<=12 && NowTime_Struct.NowTimeMONTH>=1)
+		{
+			Screen_WriteString(Months[NowTime_Struct.NowTimeMONTH-1]);
+		}
+		Screen_WriteString("-");
+		Screen_WriteNumberInTwoDigits(NowTime_Struct.NowTimeYEAR);
+		Screen_SetCursor(1, 12);
+		if(NowTime_Struct.NowTimeDAY<=7 && NowTime_Struct.NowTimeDAY>=1)
+		{
+			Screen_WriteString(Days[NowTime_Struct.NowTimeDAY-1]);
+		}
 	}
 }
 
@@ -99,8 +102,12 @@ void RequestedTask_Runnable(void)
 	{
 		/*Run the function of the task to the related received instruction*/
 		InstructionsArr[(ReceInstruc_t)Rece_Ins]();
+		/*Checking if the system has blocked the user*/
+		LedFlag=(Rece_Ins==LED_RED_INS)?0:1;
 		/*Bringing Rece_Ins value back to the default value*/
 		Rece_Ins=TOTAL_INS;
+
+
 	}
 }
 

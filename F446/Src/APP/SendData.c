@@ -37,61 +37,61 @@ void SendData_Init(void)
 	switch(SPI_MOSI_PORT)
 	{
 		case PORTA:
-			RCC_AHB1EnableClock(AHB1_GPIOA);     break;
+			RCC_u8AHB_1_EnableClk(GPIOA_EN);     break;
 		case PORTB:
-			RCC_AHB1EnableClock(AHB1_GPIOB);     break;
+			RCC_u8AHB_1_EnableClk(GPIOB_EN);     break;
 		case PORTC:
-			RCC_AHB1EnableClock(AHB1_GPIOC);     break;
+			RCC_u8AHB_1_EnableClk(GPIOC_EN);     break;
 		case PORTD:
-			RCC_AHB1EnableClock(AHB1_GPIOD);     break;
+			RCC_u8AHB_1_EnableClk(GPIOD_EN);     break;
 		case PORTE:
-			RCC_AHB1EnableClock(AHB1_GPIOE);     break;
+			RCC_u8AHB_1_EnableClk(GPIOE_EN);     break;
 		case PORTF:
-			RCC_AHB1EnableClock(AHB1_GPIOF);     break;
+			RCC_u8AHB_1_EnableClk(GPIOF_EN);     break;
 		case PORTG:
-			RCC_AHB1EnableClock(AHB1_GPIOG);     break;
+			RCC_u8AHB_1_EnableClk(GPIOG_EN);     break;
 		case PORTH:
-			RCC_AHB1EnableClock(AHB1_GPIOH);     break;
+			RCC_u8AHB_1_EnableClk(GPIOH_EN);     break;
 	}
 	/*Enabling clock on the port of the SPI SCK pin*/
 	switch(SPI_SCK_PORT)
 	{
 		case PORTA:
-			RCC_AHB1EnableClock(AHB1_GPIOA);     break;
+			RCC_u8AHB_1_EnableClk(GPIOA_EN);     break;
 		case PORTB:
-			RCC_AHB1EnableClock(AHB1_GPIOB);     break;
+			RCC_u8AHB_1_EnableClk(GPIOB_EN);     break;
 		case PORTC:
-			RCC_AHB1EnableClock(AHB1_GPIOC);     break;
+			RCC_u8AHB_1_EnableClk(GPIOC_EN);     break;
 		case PORTD:
-			RCC_AHB1EnableClock(AHB1_GPIOD);     break;
+			RCC_u8AHB_1_EnableClk(GPIOD_EN);     break;
 		case PORTE:
-			RCC_AHB1EnableClock(AHB1_GPIOE);     break;
+			RCC_u8AHB_1_EnableClk(GPIOE_EN);     break;
 		case PORTF:
-			RCC_AHB1EnableClock(AHB1_GPIOF);     break;
+			RCC_u8AHB_1_EnableClk(GPIOF_EN);     break;
 		case PORTG:
-			RCC_AHB1EnableClock(AHB1_GPIOG);     break;
+			RCC_u8AHB_1_EnableClk(GPIOG_EN);     break;
 		case PORTH:
-			RCC_AHB1EnableClock(AHB1_GPIOH);     break;
+			RCC_u8AHB_1_EnableClk(GPIOH_EN);     break;
 	}
 	/*Enabling clock on the port of the EXTI pin*/
 	switch(EXT_PORT)
 	{
 		case PORTA:
-			RCC_AHB1EnableClock(AHB1_GPIOA);     break;
+			RCC_u8AHB_1_EnableClk(GPIOA_EN);     break;
 		case PORTB:
-			RCC_AHB1EnableClock(AHB1_GPIOB);     break;
+			RCC_u8AHB_1_EnableClk(GPIOB_EN);     break;
 		case PORTC:
-			RCC_AHB1EnableClock(AHB1_GPIOC);     break;
+			RCC_u8AHB_1_EnableClk(GPIOC_EN);     break;
 		case PORTD:
-			RCC_AHB1EnableClock(AHB1_GPIOD);     break;
+			RCC_u8AHB_1_EnableClk(GPIOD_EN);     break;
 		case PORTE:
-			RCC_AHB1EnableClock(AHB1_GPIOE);     break;
+			RCC_u8AHB_1_EnableClk(GPIOE_EN);     break;
 		case PORTF:
-			RCC_AHB1EnableClock(AHB1_GPIOF);     break;
+			RCC_u8AHB_1_EnableClk(GPIOF_EN);     break;
 		case PORTG:
-			RCC_AHB1EnableClock(AHB1_GPIOG);     break;
+			RCC_u8AHB_1_EnableClk(GPIOG_EN);     break;
 		case PORTH:
-			RCC_AHB1EnableClock(AHB1_GPIOH);     break;
+			RCC_u8AHB_1_EnableClk(GPIOH_EN);     break;
 	}
 
 	NVIC_IRQ_t SendDataSPI_IRQ;
@@ -99,19 +99,19 @@ void SendData_Init(void)
 	switch(SEND_DATA_SPI)
 	{
 		case SPI_1:
-			RCC_APB2EnableClock(APB2_SPI1);
+			RCC_u8APB_2_EnableClk(SPI1_EN);
 			SendDataSPI_IRQ=SPI1_IRQ;
 			break;
 		case SPI_2:
-			RCC_APB1EnableClock(APB1_SPI2);
+			RCC_u8APB_1_EnableClk(SPI2_EN);
 			SendDataSPI_IRQ=SPI2_IRQ;
 			break;
 		case SPI_3:
-			RCC_APB1EnableClock(APB1_SPI2);
+			RCC_u8APB_1_EnableClk(SPI3_EN);
 			SendDataSPI_IRQ=SPI3_IRQ;
 			break;
 		case SPI_4:
-			RCC_APB2EnableClock(APB2_SPI4);
+			RCC_u8APB_2_EnableClk(SPI4_EN);
 			SendDataSPI_IRQ=SPI4_IRQ;
 			break;
 	}
@@ -120,12 +120,12 @@ void SendData_Init(void)
 	PinConfig_t SPI_MOSI=
 	{
 		.Port=SPI_MOSI_PORT,
-		.Pin=SPI_MOSI_PIN,
-		.AltFunc=SPI_ALT_FUNC,
+		.PinNum=SPI_MOSI_PIN,
 		.Mode=ALTERNATE_FUNCTION,
+		.Speed=LOW,
 		.OutputType=PUSH_PULL,
-		.PullType=NO_PULL,
-		.Speed=LOW_SPEED,
+		.PullType=NOPULL,
+		.AltFunc=SPI_ALT_FUNC
 	};
 	GPIO_u8PinInit(&SPI_MOSI);
 
@@ -133,12 +133,12 @@ void SendData_Init(void)
 	PinConfig_t SPI_SCK=
 	{
 		.Port=SPI_SCK_PORT,
-		.Pin=SPI_SCK_PIN,
-		.AltFunc=SPI_ALT_FUNC,
+		.PinNum=SPI_SCK_PIN,
 		.Mode=ALTERNATE_FUNCTION,
+		.Speed=LOW,
 		.OutputType=PUSH_PULL,
-		.PullType=NO_PULL,
-		.Speed=LOW_SPEED,
+		.PullType=NOPULL,
+		.AltFunc=SPI_ALT_FUNC
 	};
 	GPIO_u8PinInit(&SPI_SCK);
 
@@ -146,11 +146,11 @@ void SendData_Init(void)
 	PinConfig_t EXT_Pin=
 	{
 		.Port=EXT_PORT,
-		.Pin=EXT_PIN,
+		.PinNum=EXT_PIN,
 		.Mode=OUTPUT,
+		.Speed=LOW,
 		.OutputType=OPEN_DRAIN,
-		.PullType=NO_PULL,
-		.Speed=LOW_SPEED,
+		.PullType=NOPULL,
 	};
 	GPIO_u8PinInit(&EXT_Pin);
 	/*Starting it with high as we will make in the other MCU as pull-up*/

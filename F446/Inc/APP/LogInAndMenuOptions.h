@@ -32,20 +32,7 @@
 #define   TOTAL_ALARMS    5U
 #define  MAX_ALARM_NAME_CHAR        15u
 
-
-#define CLEAR_TERMINAL "\033\143"
-
-typedef struct
-{
-	uint16_t NowTimeSEC;
-	uint16_t NowTimeMIN;
-	uint16_t NowTimeHOUR;
-	uint16_t NowTimeDAY;
-	uint16_t NowTimeDATE;
-	uint16_t NowTimeMONTH;
-	uint16_t NowTimeYEAR;
-	uint16_t Now_pm_am;
-}NowTimeStruct_t;
+#define  TERMINATE_SYSTEM       10U
 
 
 /**
@@ -141,7 +128,7 @@ uint8_t Take_Time(NowTimeStruct_t* Copy_FSNowTimeStruct);
  * @param[out] Copy_FSNowTimeStruct: this is a pointer to struct which carrying details of alarm setting
  * @return: this function will return Error State Value
  */
-uint8_t AlarmName(char *Copy_pu8ArrName);
+uint8_t ReceiveAlarmName(char *Copy_pu8ArrName);
 
 /**
  * @brief: this function is used to Set alarm
@@ -155,7 +142,7 @@ uint8_t SetAlarm(NowTimeStruct_t* Copy_FSNowTimeStruct);
  */
 void ReturnToMenu(void);
 
-void SystemInit(void);
+void System_Init(void);
 
 
 #endif /* LOGINANDMENUOPTIONS_H_ */

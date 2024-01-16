@@ -344,6 +344,6 @@ uint8_t  USART_u8ReceiveDataAsynch(USART_Num_t Copy_EnumUSART_Num ,uint8_t *Copy
  * @param[in] Copy_pfFuncPtr :  this is an array of pointer to function which carrying the address of ISR
  * @return Local_u8ErrorState this variable to carry Error State value
  */
-uint8_t USART_u8SetCallBack(USART_Num_t Copy_EnumUSART_Num , void (*Copy_pfFuncPtr(void)));
+uint8_t USART_u8SetCallBack(USART_Num_t Copy_EnumUSART_Num , void (*Copy_pfFuncPtr)(void));
 
 #endif /* USART_INTERFACE_H_ */

@@ -57,7 +57,7 @@ static uint8_t  USART_u8SetBaudRate(USRAT_PinConfig_t* USRAT_PinConfig)
 
 		/* calculate the value of USART_DIV before divided it into (MintissaPart,FractionPart) */
 		Local_u32DemoOfUSART_Div =(uint32_t)(EIGHT_VAL*(TWO_VAL - (USRAT_PinConfig->OverSampling))*(USRAT_PinConfig->BaudRate));
-		Local_floatUSART_DIV = (((float)F_PCLK /(float)Local_u32DemoOfUSART_Div) );
+		Local_floatUSART_DIV = (((float)F_PCLK /(float)Local_u32DemoOfUSART_Div));
 		Local_floatUSART_DIV *= ONE_THOUSAND_VAL;
 
 		/* calculate the value of MintissaPart and Put it into the MintissaPart bits */
@@ -692,7 +692,7 @@ uint8_t UART_u8ReceiveBufferSynch_IT(USART_Num_t Copy_EnumUSART_Num , uint8_t *C
  * @param[in] Copy_pfFuncPtr :  this is an array of pointer to function which carrying the address of ISR
  * @return Local_u8ErrorState this variable to carry Error State value
  */
-uint8_t USART_u8SetCallBack(USART_Num_t Copy_EnumUSART_Num , void (*Copy_pfFuncPtr(void)))
+uint8_t USART_u8SetCallBack(USART_Num_t Copy_EnumUSART_Num , void (*Copy_pfFuncPtr)(void))
 {
 	/* define a variable to carry error status value */
 	uint8_t Local_u8ErrorState=OK;

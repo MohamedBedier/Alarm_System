@@ -1,5 +1,5 @@
 /*
- * SendData_cfg.h
+ * ReceiveData_cfg.h
  *
  *  Created on: Jan 9, 2024
  *      Author: AlsharQawy
@@ -25,9 +25,6 @@
 #define  SPI_SCK_PIN     PIN5
 #define  SPI_MOSI_PIN    PIN7
 #define  EXT_PIN         PIN10
-
-
-
 
 
 

@@ -115,7 +115,7 @@ ErrorStatus_t NVIC_DisableInterrupt(NVIC_IRQ_t IQR_Num);
 ErrorStatus_t NVIC_SetPenddingFlag(NVIC_IRQ_t IQR_Num);
 ErrorStatus_t NVIC_ClearPenddingFlag(NVIC_IRQ_t IQR_Num);
 ActiveInterrrupt_t NVIC_GetActiveFlag(NVIC_IRQ_t IRQ_Name);
-ErrorStatus_t NVIC_voidSetPriority(NVIC_IRQ_t IRQ_Name, Priority_t priority);
+ErrorStatus_t NVIC_voidSetPriority(NVIC_IRQ_t IRQ_Name, SubGroupPriority_t priority);
 
 
 #endif /* NVIC_INTERFACE_H_ */

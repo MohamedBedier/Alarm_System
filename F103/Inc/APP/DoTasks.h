@@ -14,7 +14,7 @@ void RequestedTask_Runnable(void);
 
 /////////////////////////////////
 #define  BUZZER_PORT       PORTB
-#define  BUZZER_PIN        PIN4
+#define  BUZZER_PIN        PIN9
 #define  RED_LED_PORT      PORTA
 #define  RED_LED_PIN       PIN1
 #define  GREEN_LED_PORT    PORTC

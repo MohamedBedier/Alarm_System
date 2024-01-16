@@ -38,6 +38,16 @@ uint8_t  GPIO_u8PinInit(const PinConfig_t* PinConfig)
 		/* check on port and pin options to protect our function */
 		if((PinConfig->Port >= PORTA) && (PinConfig->Port <= PORTH) && (PinConfig->PinNum >= PIN0) && (PinConfig->PinNum <= PIN15) )
 		{
+			/* select the pin alternate function */
+			if(PinConfig->Mode == ALTERNATE_FUNCTION)
+			{
+				uint8_t Local_u8RegNum =(PinConfig->PinNum) / AFR_PIN_SHIFTING;
+				uint8_t Local_u8BitNum =(PinConfig->PinNum) % AFR_PIN_SHIFTING;
+
+				(GPIOPORT[PinConfig->Port]->AFR[Local_u8RegNum] &= ~(AFR_MASK << (Local_u8BitNum  * AFR_PIN_ACCESS))); /* clear the AFR bits */
+				(GPIOPORT[PinConfig->Port]->AFR[Local_u8RegNum] |= ((PinConfig->AltFunc) << (Local_u8BitNum * AFR_PIN_ACCESS)));/* put AFR in our register */
+			}
+
 			/* Select GPIO mode : Input , Output , Analog , Alternate function  */
 			(GPIOPORT[PinConfig->Port]->MODER) &= (~(MODER_MASK << ((PinConfig->PinNum) * MODER_PIN_ACCESS))); /* clear the mode bits */
 			(GPIOPORT[PinConfig->Port]->MODER) |= ((PinConfig->Mode) << ((PinConfig->PinNum) * MODER_PIN_ACCESS));/* put mode in our register */
@@ -58,15 +68,6 @@ uint8_t  GPIO_u8PinInit(const PinConfig_t* PinConfig)
 				(GPIOPORT[PinConfig->Port]->OSPEEDR) &= (~(OSPEEDR_MASK << ((PinConfig->PinNum) * OSPEEDR_PIN_ACCESS))); /* clear the OSPEEDR bits */
 				(GPIOPORT[PinConfig->Port]->OSPEEDR) |= ((PinConfig->Speed) << ((PinConfig->PinNum) * OSPEEDR_PIN_ACCESS));/* put OSPEEDR in our register */
 
-				/* select the pin alternate function */
-				if(PinConfig->Mode == ALTERNATE_FUNCTION)
-				{
-					uint8_t Local_u8RegNum =(PinConfig->PinNum) / AFR_PIN_SHIFTING;
-					uint8_t Local_u8BitNum =(PinConfig->PinNum) % AFR_PIN_SHIFTING;
-
-					(GPIOPORT[PinConfig->Port]->AFR[Local_u8RegNum] &= ~(AFR_MASK << (Local_u8BitNum  * AFR_PIN_ACCESS))); /* clear the AFR bits */
-					(GPIOPORT[PinConfig->Port]->AFR[Local_u8RegNum] |= ((PinConfig->AltFunc) << (Local_u8BitNum * AFR_PIN_ACCESS)));/* put AFR in our register */
-				}
 			}else
 			{
 				/* update error state */

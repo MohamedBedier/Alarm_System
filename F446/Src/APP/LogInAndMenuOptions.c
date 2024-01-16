@@ -9,20 +9,24 @@
 /*************************************************************/
 /*************************************************************/
 
-#include <LogInAndMenuOptions.h>
 #include <stdint.h>
 #include "ErrType.h"
 #include "BIT_MATH.h"
-#include "Stm32F446xx.h"
+#include "SysTick_Interface.h"
 #include "GPIO_interface.h"
 #include "USART_interface.h"
 #include "RCC_Interface.h"
+#include <GetTime.h>
+#include <DoTasks_cfg.h>
+#include <SendData.h>
+#include <LogInAndMenuOptions.h>
+
 
 NowTimeStruct_t NowTimeStruct_instance;
 
 NowTimeStruct_t AlarmsArr[TOTAL_ALARMS];
-
 char AlarmNamesArr[TOTAL_ALARMS][15] = {0};
+
 
 /**
  * @brief: this function is used to send "Welcome to our project" to the user
@@ -224,6 +228,7 @@ uint32_t  TakeUserPassWord(void)
 
 		if(Local_u32PasswordDigits != 4321 && Local_u32PasswordDigits != 8765)
 		{
+			SendData_TransmitInstruction(LED_RED_INS);
 			/*  Tell the user you finished 3 times and exti the system */
 			UART_u8SendBufferSynch(USART2_peri,WrongPW_3Times_StrArr,WrongPW_3Times_StringDataLength);
 			SystemShutDown();
@@ -241,7 +246,7 @@ uint32_t  TakeUserPassWord(void)
 void  SystemShutDown(void)
 {
 	/* disable the peripheral clock */
-	RCC_u8APB_1_DisableClk(USART2_EN);
+	RCC_u8APB_1_DisableClk(UART2_EN);
 }
 
 /**
@@ -305,19 +310,32 @@ uint8_t  SystemLogIn(void)
 
 	Local_u32UserID = AskAndTakeUserIdThenCheckIsValid();
 
-	Local_u32UserPassWord = TakeUserPassWord();
+	if(Local_u32UserID==1234 || Local_u32UserID==5678)
+	{
+		Local_u32UserPassWord = TakeUserPassWord();
+	}
+	else
+	{
+		SendData_TransmitInstruction(LED_RED_INS);
+	}
 
 	if(Local_u32UserID == 1234 && Local_u32UserPassWord == 4321)
 	{
+		SendData_TransmitInstruction(GREEN_LED_INS);
 		/* Show the menu */
 		ShowMenu();
 		Local_u8ReceivedDataFromMenu = Rececive_An_Option();
 
 	}else if(Local_u32UserID == 5678 && Local_u32UserPassWord == 8765)
 	{
+		SendData_TransmitInstruction(GREEN_LED_INS);
 		/* Show the menu */
 		ShowMenu();
 		Local_u8ReceivedDataFromMenu = Rececive_An_Option();
+	}
+	else
+	{
+		Local_u8ReceivedDataFromMenu=TERMINATE_SYSTEM;
 	}
 
 	return Local_u8ReceivedDataFromMenu;
@@ -417,7 +435,7 @@ mm-dd-yy (1:7 that is the number of day name) HH:MM:SS AM or PM\n(For ex: 01-13-
 			Local_u8CountDigit++;
 		}while(Local_u8CountDigit < MAX_DAY_DIGITS);
 
-		Copy_FSNowTimeStruct->NowTimeDAY = Local_u16DateDay;
+		Copy_FSNowTimeStruct->NowTimeDATE = Local_u16DateDay;
 
 		/* receive - */
 		USART_u8ReceiveData(USART2_peri,&Local_u8ReceivedDataFromUser);
@@ -440,7 +458,7 @@ mm-dd-yy (1:7 that is the number of day name) HH:MM:SS AM or PM\n(For ex: 01-13-
 			Local_u8CountDigit++;
 		}while(Local_u8CountDigit < MAX_YEAR_DIGITS);
 
-		Copy_FSNowTimeStruct->NowTimeYEAR = Local_u16DateYear;
+		Copy_FSNowTimeStruct->NowTimeYEAR = Local_u16DateYear-2000;
 	}else
 	{
 		Local_u8ErrorStateVal = NULL_PTR_ERR;
@@ -490,7 +508,7 @@ uint8_t Take_Day(NowTimeStruct_t* Copy_FSNowTimeStruct)
 			Local_u8CountDigit++;
 		}while(Local_u8CountDigit < MAX_DATE_DIGITS);
 
-		Copy_FSNowTimeStruct->NowTimeDATE = Local_u16DayName;
+		Copy_FSNowTimeStruct->NowTimeDAY = Local_u16DayName;
 
 		/* receive ) */
 		USART_u8ReceiveData(USART2_peri,&Local_u8ReceivedDataFromUser);
@@ -681,7 +699,7 @@ uint8_t SetTimeAndDate(NowTimeStruct_t* Copy_FSNowTimeStruct)
  * @param[out] Copy_FSNowTimeStruct: this is a pointer to struct which carrying details of alarm setting
  * @return: this function will return Error State Value
  */
-uint8_t AlarmName(char *Copy_pu8ArrName)
+uint8_t ReceiveAlarmName(char *Copy_pu8ArrName)
 {
 	uint8_t Local_u8ErrorStateVal = INIT_VALUE_BY_ZERO;
 
@@ -748,7 +766,7 @@ uint8_t SetAlarm(NowTimeStruct_t* Copy_FSNowTimeStruct)
 				/* send this message to console window */
 				UART_u8SendBufferSynch(USART2_peri,AskAlarmName,AskAlarmName_StringDataLength);
 
-				AlarmName(AlarmNamesArr[Alarm]);
+				ReceiveAlarmName(AlarmNamesArr[Alarm]);
 				/* Set time and date here */
 				Take_Date(Copy_FSNowTimeStruct);
 				Take_Day(Copy_FSNowTimeStruct);
@@ -844,7 +862,7 @@ void ReturnToMenu(void)
 
 		while(USART_u8ReceiveDataAsynch(USART2_peri,&Local_u8ReceivedDataFromUser) != 1 && Local_u16TIME_OUT_Counter< UART_TIME_OUT_VAL)
 		{
-			SYSTICK_u8Delay_MS(1);
+			SysTick_Delayms(1);
 			Local_u16TIME_OUT_Counter++;
 		}
 
@@ -865,9 +883,9 @@ void ReturnToMenu(void)
 	}
 }
 
-void SystemInit(void)
+void System_Init(void)
 {
-	RCC_u8APB_1_EnableClk(USART2_EN);
+	RCC_u8APB_1_EnableClk(UART2_EN);
 	RCC_u8AHB_1_EnableClk(GPIOA_EN);
 
 	USRAT_PinConfig_t  USART_Config_Struct ={.USART_Num = USART2_peri,.Mode=RX_AND_TX_MODE,.WordLength =EIGHT_BIT,.USART_Int_Sts = USART_INT_DISABLED,

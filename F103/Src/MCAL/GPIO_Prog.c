@@ -45,10 +45,6 @@ uint8_t  GPIO_u8PinInit(const PinConfig_t* PinConfig)
 			/* this variable to determine which pin work on it and our result in range [0,15]  refers to our 15 pins  */
 			uint8_t Local_u8BitNum =(PinConfig->PinNum) % CR_PIN_SHIFTING;
 
-			/* Select GPIO mode : Input , Output with 10MHZ , Output with 2MHZ , Output with 50MHZ  */
-			((GPIOPORT[PinConfig->Port] -> CR[Local_u8RegNum])  &= ~(MODE_MASK << (Local_u8BitNum  * MODE_PIN_ACCESS)));/* clear the MODE bits */
-			((GPIOPORT[PinConfig->Port] -> CR[Local_u8RegNum])  |= ((PinConfig->Mode) << (Local_u8BitNum  * MODE_PIN_ACCESS)));/* SET the MODE bits */
-
 			/* check on mode of pin is input or output[MAXSPEED_10MHZ , MAXSPEED_2MHZ, MAXSPEED_50MHZ] */
 			if((PinConfig->Mode)== INPUT)
 			{
@@ -66,6 +62,12 @@ uint8_t  GPIO_u8PinInit(const PinConfig_t* PinConfig)
 			{
 				/* update error state */
 				Local_u8ErrorState=NOK;
+			}
+			if(Local_u8ErrorState==OK)
+			{
+				/* Select GPIO mode : Input , Output with 10MHZ , Output with 2MHZ , Output with 50MHZ  */
+				((GPIOPORT[PinConfig->Port] -> CR[Local_u8RegNum])  &= ~(MODE_MASK << (Local_u8BitNum  * MODE_PIN_ACCESS)));/* clear the MODE bits */
+				((GPIOPORT[PinConfig->Port] -> CR[Local_u8RegNum])  |= ((PinConfig->Mode) << (Local_u8BitNum  * MODE_PIN_ACCESS)));/* SET the MODE bits */
 			}
 		}else
 		{
@@ -246,12 +248,12 @@ uint8_t GPIO_u8SetEXTIPort(EXTI_Lines_t Copy_EnumExti_Line , Port_t Copy_EnumPOR
 	if((Copy_EnumExti_Line >= Line0 ) && (Copy_EnumExti_Line <= Line19))
 	{
 		/* clear bits before use it */
-		GPIOPORT[Copy_EnumPORT]->AFIO_EXTICR[Local_u8RegNumber] &=(~((0xf) <<Local_u8BitNumber));
+		AFIO->AFIO_EXTICR[Local_u8RegNumber] &=(~((0xf) <<Local_u8BitNumber));
 
 		if((Copy_EnumPORT>= PORTA) && (Copy_EnumPORT <= PORTG))
 		{
 			/* SET the value of the port inside our register */
-			GPIOPORT[Copy_EnumPORT]->AFIO_EXTICR[Local_u8RegNumber] |=(Copy_EnumPORT<<Local_u8BitNumber);
+			AFIO->AFIO_EXTICR[Local_u8RegNumber] |=(Copy_EnumPORT<<Local_u8BitNumber);
 		}else
 		{
 			/* update Error state value  */

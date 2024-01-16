@@ -8,6 +8,9 @@
 #ifndef CNFG_H_
 #define CNFG_H_
 
+#define    AHB_CLK     8000000U
+#define    APB1_CLK    8000000U
+#define    APB2_CLK    8000000U
 
 #define    PRIGROUP_BITS       4U
 #define    TOTAL_PRIORITIES    15U
@@ -31,7 +34,7 @@ typedef enum
 	GRP13_SUB0,
 	GRP14_SUB0,
 	GRP15_SUB0,
-}Priority_t;
+}SupGroupPriority_t;
 #elif PRIGROUP_BITS==4
 typedef enum
 {
@@ -51,7 +54,7 @@ typedef enum
 	GRP6_SUB1,
 	GRP7_SUB0,
 	GRP7_SUB1,
-}Priority_t;
+}SupGroupPriority_t;
 #elif PRIGROUP_BITS==5
 typedef enum
 {
@@ -71,7 +74,7 @@ typedef enum
 	GRP3_SUB1,
 	GRP3_SUB2,
 	GRP3_SUB3,
-}Priority_t;
+}SupGroupPriority_t;
 #elif PRIGROUP_BITS==6
 typedef enum
 {
@@ -91,7 +94,7 @@ typedef enum
 	GRP1_SUB5,
 	GRP1_SUB6,
 	GRP1_SUB7,
-}Priority_t;
+}SupGroupPriority_t;
 #elif PRIGROUP_BITS==7
 typedef enum
 {
@@ -111,7 +114,7 @@ typedef enum
 	GRP0_SUB13,
 	GRP0_SUB14,
 	GRP0_SUB15,
-}Priority_t;
+}SupGroupPriority_t;
 #endif
 
 #endif /* CNFG_H_ */

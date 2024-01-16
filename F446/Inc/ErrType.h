@@ -32,8 +32,8 @@
 //@ErrorStatus_t
 typedef enum
 {
-	OK=0,
-	NOK,
+	_OK=0,
+	_NOK,
 	NULLPTR,
 	OUT_OF_RANGE,
 	UNKNOWN,

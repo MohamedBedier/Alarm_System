@@ -421,7 +421,7 @@ uint8_t DMA_u8EnabledInt(DMA_NUM_t Copy_EnumDMA_Num , Stream_Selected_t Copy_Enu
  * @param Copy_EnumInterrupt_Name : this is an enum which using to interrupt name
  * @return Local_u8ErrorState this variable to carry Error State value
  */
-uint8_t DMA_u8EnabledInt(DMA_NUM_t Copy_EnumDMA_Num , Stream_Selected_t Copy_EnumStream_Num,DMA_Int_Name_t  Copy_EnumInterrupt_Name);
+uint8_t DMA_u8DisabledInt(DMA_NUM_t Copy_EnumDMA_Num , Stream_Selected_t Copy_EnumStream_Num,DMA_Int_Name_t  Copy_EnumInterrupt_Name);
 /**
  * @brief This function to initiate DMA Configurations
  * @param[IN] Copy_psDMA this parameter is a pointer to struct which Carrying DMA configurations

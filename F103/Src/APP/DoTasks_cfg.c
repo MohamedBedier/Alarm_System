@@ -65,13 +65,13 @@ static void InsTask3(void)
 	Screen_SetCursor(1, (16-size)/2);
 	Screen_WriteString(AlarmName);
 
+	BZR_u8TurnOn(BUZZER_PORT,  BUZZER_PIN);
 	PinVal_t PB_State=PIN_HIGH;
 	while(PB_State==PIN_HIGH)
 	{
-		BZR_u8TurnOn(BUZZER_PORT,  BUZZER_PIN);
 		GPIO_u8ReadPinValue(STOP_ALARM_PORT, STOP_ALARM_PIN, &PB_State);
 	}
-
+	BZR_u8TurnOff(BUZZER_PORT,  BUZZER_PIN);
 	Screen_Clear();
 }
 
