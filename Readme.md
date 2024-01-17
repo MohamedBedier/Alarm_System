@@ -16,24 +16,35 @@ and a red LED indicates the authentication failure.
 ## **********  Features  ********** 
 
 1- We can tracing Time and Date accurately.
+
 2- we can set time and date for RTC.
+
 3- we can set diferent alarms,We can handle up to 5 alarms.
+
 4- Security on the system by using Log in system.
 
 ## **********  HardWare components  ********** 
 
 1- Nucleo[STM32F446RE] board.
+
 2- Panda board (based on STM32F103C8T6 MCU ).
+
 3- DS1307 RTC module.
+
 4- LCD display.
+
 5- Buzzer.
+
 6- Red Led.
+
 7- Green Led.
 
 ## **********  Communication between our components  ********** 
 
 1 - Nucleo[STM32F446RE] board and RTC Module [DS1307] Using I2C.
+
 2 - Nucleo[STM32F446RE] board and Blue Pill Board [STM32F103C8T6] Using SPI.
+
 3 - Nucleo[STM32F446RE] board and PC Using UART sending and receiving via serial monitor.
 
 ## **********  Usage ********** 
@@ -52,3 +63,7 @@ following the instructions on the terminal.
 accompanied by the display of the alarm name and alarm number on the LCD screen.
 
 5- If 5 alarms are busy system will inform you and shut down the terminal.
+
+## **********  this picture for showing our layer architecture  ********** 
+
+![7ca96ab4-ed97-4325-bd45-7f1862ddcca3](https://github.com/MohamedBedier/Alarm_System/assets/113776299/3d9f4d0b-d814-44f3-9ab1-aacdcf18c143)
