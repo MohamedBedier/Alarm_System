@@ -1,27 +1,27 @@
-## Alarm System which Based on STM32F446RE and STM32F103C8T6
+## Alarm System which is Based on STM32F446RE and STM32F103C8T6
 
 ## **********  Overview  ********** 
 This project involves the development of a real-time alarm clock 
 system using two STM32 microcontrollers: STM32F446RE and STM32F103C8T6.
-The system is designed to accurately keep track of time.The project starts
-with log in system [ASK USER_ID And USER_PassWord].If ID is correct,it will 
-ask Password.If ID and Password are matching a Green led is on then allow 
+The system is designed to accurately keep track of time. The project starts
+with a login system [ASK USER_ID And USER_PassWord]. If ID is correct, it will 
+ask Password. If ID and Password match, a green LED is on then allow 
 the user to Display Date and Time, set Date and Time and Set alarm.
 The system supports up to five alarms. When the alarm time arrives, 
 a buzzer sounds through an external trigger on the STM32F103C8T6.
-it is going to generate EXTI to STM32F103C8T6 and buzzer will be on. 
+it is going to generate EXTI to STM32F103C8T6 and the buzzer will be on. 
 if the ID and password are incorrect, the system shuts down, 
 and a red LED indicates the authentication failure.
 
 ## **********  Features  ********** 
 
-1- We can tracing Time and Date accurately.
+1- We can trace Time and Date accurately.
 
-2- we can set time and date for RTC.
+2- we can set a time and date for RTC.
 
-3- we can set diferent alarms,We can handle up to 5 alarms.
+3- we can set different alarms, We can handle up to 5 alarms.
 
-4- Security on the system by using Log in system.
+4- Security on the system by using a login system.
 
 ## **********  HardWare components  ********** 
 
@@ -56,14 +56,14 @@ To make effective use of the Alarm System.
 2- A successful login will be indicated by the green LED
 on the Panda board, while a red LED will signal a login failure.
 
-3- After login the menu options are appeared on the terminal and you must 
+3- After login, the menu options appear on the terminal and you must 
 following the instructions on the terminal.
 
 4- When the time arrives for an alarm, the buzzer will sound,
 accompanied by the display of the alarm name and alarm number on the LCD screen.
 
-5- If 5 alarms are busy system will inform you and shut down the terminal.
+5- If 5 alarms are busy, the system will inform you and shut down the terminal.
 
-## **********  this picture for showing our layer architecture  ********** 
+## **********  This picture for showing our layer architecture  ********** 
 
 ![7ca96ab4-ed97-4325-bd45-7f1862ddcca3](https://github.com/MohamedBedier/Alarm_System/assets/113776299/3d9f4d0b-d814-44f3-9ab1-aacdcf18c143)
